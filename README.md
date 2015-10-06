@@ -1,6 +1,6 @@
 # consul-release
 ---
-
+test dredd gitbot
 This is a [BOSH](http://bosh.io) release for [consul](https://github.com/hashicorp/consul).
 
 * CI is currently being built
