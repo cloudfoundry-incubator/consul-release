@@ -81,6 +81,7 @@ properties:
       log_level: (( property_overrides.consul.agent.log_level || nil ))
       servers:
         lan: (( jobs.consul_z1.networks.consul1.static_ips jobs.consul_z2.networks.consul2.static_ips ))
+      recursors: (( property_overrides.consul.agent.recursors || nil ))
 
 # The keys below should not be included in the final stub
 release_version: (( release_version_overrides || "latest" ))

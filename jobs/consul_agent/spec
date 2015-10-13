@@ -63,3 +63,7 @@ properties:
     description: "PEM-encoded client key"
   consul.encrypt_keys:
     description: "A list of passphrases that will be converted into encryption keys, the first key in the list is the active one"
+
+  consul.agent.recursors:
+    description: "addresses of upstream DNS servers that are used to recursively resolve queries if they are not inside the service domain for consul."
+    default: []

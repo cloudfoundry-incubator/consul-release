@@ -46,6 +46,7 @@
     "ports" => {
       "dns" => 53,
     },
+    "recursors" => p("consul.agent.recursors"),
 
     # without this, a single bootstrapped server will be orphaned after
     # restarting
