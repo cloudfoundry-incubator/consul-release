@@ -139,10 +139,9 @@ EOF
     synced=true
     if [ $expected -gt 0 ]; then
       synced=false
-      consul_server_ips="<%=p("consul.agent.servers.lan").join('\\|')%>"
       for i in $(seq <%= p("consul.agent.sync_timeout_in_seconds") %>); do
         echo "$(date)" "Waiting to have joined one of: ${consul_join}"
-        if $PKG/bin/consul members -status=alive | grep "${consul_server_ips}"; then
+        if $PKG/bin/consul members -status=alive | grep 'server'; then
           synced=true
           break
         fi
