@@ -1,0 +1,10 @@
+# abort script on any command that exits with a non zero value
+set -e -x
+
+echo "extracting dnsmasq"
+
+tar xvfz dnsmasq/dnsmasq-2.75.tar.gz
+
+pushd dnsmasq-2.75
+  make install PREFIX=${BOSH_INSTALL_TARGET}
+popd

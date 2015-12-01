@@ -1,0 +1,51 @@
+#!/bin/bash -e
+
+LOG_DIR=/var/vcap/sys/log/dnsmasq
+RUN_DIR=/var/vcap/sys/run/dnsmasq
+DATA_DIR=/var/vcap/store/dnsmasq
+CONF_DIR=/var/vcap/jobs/dnsmasq/config
+
+PKG=/var/vcap/packages/dnsmasq
+
+PID_FILE=$RUN_DIR/dnsmasq.pid
+
+source /var/vcap/packages/consul-common/utils.sh
+
+case $1 in
+  start)
+
+    pid_guard ${PID_FILE} "dnsmasq"
+
+    mkdir -p $LOG_DIR
+    chown -R vcap:vcap $LOG_DIR
+
+    mkdir -p $RUN_DIR
+    chown -R vcap:vcap $RUN_DIR
+
+    mkdir -p $DATA_DIR
+    chown -R vcap:vcap $DATA_DIR
+
+    echo 'nameserver 127.0.0.1' > /etc/resolvconf/resolv.conf.d/head
+    if resolvconf --updates-are-enabled; then
+      resolvconf -u
+    else
+      if ! grep -q 127.0.0.1 /etc/resolv.conf; then
+        sed -i -e '1i nameserver 127.0.0.1' /etc/resolv.conf
+      fi
+    fi
+
+  setcap cap_net_bind_service=+ep $PKG/sbin/dnsmasq
+
+  chpst -u vcap:vcap $PKG/sbin/dnsmasq -C $CONF_DIR/dnsmasq.conf --pid-file=$PID_FILE
+
+  ;;
+  stop)
+    dnsmasq_pid=`head -1 $PID_FILE`
+    kill ${dnsmasq_pid} || true
+    wait ${dnsmasq_pid}
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+  ;;
+esac

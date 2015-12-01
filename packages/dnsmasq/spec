@@ -1,0 +1,7 @@
+---
+name: dnsmasq
+
+dependencies:
+
+files:
+  - dnsmasq/dnsmasq-2.75.tar.gz  # http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.75.tar.gz

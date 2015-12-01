@@ -1,0 +1,37 @@
+<%
+
+def discover_dns_servers
+  networks = spec.networks.marshal_dump
+
+  _, network = networks.find do |_name, network_spec|
+    network_spec.default
+  end
+
+  if !network
+    _, network = networks.first
+  end
+
+  dns = network.dns
+
+  dns
+end
+
+nameservers = discover_dns_servers
+
+%>
+domain-needed
+bogus-priv
+strict-order
+port=53
+
+listen-address=127.0.0.1
+interface=lo
+bind-interfaces
+expand-hosts
+cache-size=1000
+all-servers
+
+server=/cf.internal/127.0.0.1#8600
+<% nameservers.each do |ns| %>
+server=<%= ns %>
+<% end %>
