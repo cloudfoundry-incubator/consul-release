@@ -38,6 +38,19 @@ var _ = Describe("ConsulConfigDefiner", func() {
 			It("defaults to `cf.internal`", func() {
 				Expect(consulConfig.Domain).To(Equal("cf.internal"))
 			})
+
+			Context("when the `consul.agent.domain` property is set", func() {
+				It("uses that value", func() {
+					consulConfig = config.GenerateConfiguration(config.Config{
+						Consul: config.ConfigConsul{
+							Agent: config.ConfigConsulAgent{
+								Domain: "my-domain",
+							},
+						},
+					})
+					Expect(consulConfig.Domain).To(Equal("my-domain"))
+				})
+			})
 		})
 
 		Describe("data_dir", func() {
@@ -114,6 +127,40 @@ var _ = Describe("ConsulConfigDefiner", func() {
 				Expect(consulConfig.Ports).To(Equal(config.ConsulConfigPorts{
 					DNS: 53,
 				}))
+			})
+
+			Context("when the `consul.agent.ports.dns` property is set", func() {
+				It("uses that value", func() {
+					consulConfig = config.GenerateConfiguration(config.Config{
+						Consul: config.ConfigConsul{
+							Agent: config.ConfigConsulAgent{
+								Ports: config.ConfigConsulAgentPorts{
+									DNS: 8600,
+								},
+							},
+						},
+					})
+					Expect(consulConfig.Ports).To(Equal(config.ConsulConfigPorts{
+						DNS: 8600,
+					}))
+				})
+			})
+
+			Context("when the `consul.agent.ports.dns` property is set to a well-known port", func() {
+				It("uses that value", func() {
+					consulConfig = config.GenerateConfiguration(config.Config{
+						Consul: config.ConfigConsul{
+							Agent: config.ConfigConsulAgent{
+								Ports: config.ConfigConsulAgentPorts{
+									DNS: 1023,
+								},
+							},
+						},
+					})
+					Expect(consulConfig.Ports).To(Equal(config.ConsulConfigPorts{
+						DNS: 53,
+					}))
+				})
 			})
 		})
 

@@ -37,6 +37,14 @@ properties:
     description: "Name of the agent's datacenter."
     default: dc1
 
+  consul.agent.domain:
+    description: "All queries in this domain are assumed to be handled by Consul and will not be recursively resolved."
+    default: cf.internal
+
+  consul.agent.ports.dns:
+    description: "The DNS server bind port."
+    default: 53
+
   consul.agent.services:
     description: "Map of consul service definitions."
     default: {}

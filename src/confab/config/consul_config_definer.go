@@ -44,6 +44,16 @@ func GenerateConfiguration(config Config) ConsulConfig {
 		lan = []string{}
 	}
 
+	domain := "cf.internal"
+	if len(config.Consul.Agent.Domain) > 0 {
+		domain =  config.Consul.Agent.Domain
+	}
+
+	dnsPort := 53
+	if config.Consul.Agent.Ports.DNS > 1023 {
+		dnsPort = config.Consul.Agent.Ports.DNS
+	}
+
 	nodeName := strings.Replace(config.Node.Name, "_", "-", -1)
 	nodeName = fmt.Sprintf("%s-%d", nodeName, config.Node.Index)
 
@@ -51,13 +61,13 @@ func GenerateConfiguration(config Config) ConsulConfig {
 
 	consulConfig := ConsulConfig{
 		Server:     isServer,
-		Domain:     "cf.internal",
+		Domain:     domain,
 		Datacenter: config.Consul.Agent.Datacenter,
 		DataDir:    "/var/vcap/store/consul_agent",
 		LogLevel:   config.Consul.Agent.LogLevel,
 		NodeName:   nodeName,
 		Ports: ConsulConfigPorts{
-			DNS: 53,
+			DNS: dnsPort,
 		},
 		RejoinAfterLeave:   true,
 		RetryJoin:          lan,
