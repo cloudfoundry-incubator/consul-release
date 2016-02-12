@@ -48,7 +48,7 @@ var _ = Describe("Config", func() {
 					"agent": {
 						"services": {
 							"myservice": {
-								"name" : "myservicename"	
+								"name" : "myservicename"
 							}
 						},
 						"mode": "server",
@@ -97,6 +97,43 @@ var _ = Describe("Config", func() {
 				},
 				Confab: config.ConfigConfab{
 					TimeoutInSeconds: 30,
+				},
+			}))
+		})
+
+		It("returns another config with given JSON", func() {
+			json := []byte(`{
+				"consul": {
+					"agent": {
+						"domain": "my-domain",
+						"ports": {
+							"dns": 8600
+						}
+					}
+				}
+			}`)
+			cfg, err := config.ConfigFromJSON(json)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(cfg).To(Equal(config.Config{
+				Path: config.ConfigPath{
+					AgentPath:       "/var/vcap/packages/consul/bin/consul",
+					ConsulConfigDir: "/var/vcap/jobs/consul_agent/config",
+					PIDFile:         "/var/vcap/sys/run/consul_agent/consul_agent.pid",
+				},
+				Consul: config.ConfigConsul{
+					RequireSSL: true,
+					Agent: config.ConfigConsulAgent{
+						Servers: config.ConfigConsulAgentServers{
+							LAN: []string{},
+						},
+						Domain: "my-domain",
+						Ports: config.ConfigConsulAgentPorts{
+							DNS: 8600,
+						},
+					},
+				},
+				Confab: config.ConfigConfab{
+					TimeoutInSeconds: 55,
 				},
 			}))
 		})
