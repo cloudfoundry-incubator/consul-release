@@ -37,12 +37,18 @@ type ConfigConsulAgent struct {
 	Services        map[string]ServiceDefinition
 	Mode            string
 	Datacenter      string `json:"datacenter"`
+	Domain          string `json:"domain"`
+	Ports           ConfigConsulAgentPorts
 	LogLevel        string `json:"log_level"`
 	ProtocolVersion int    `json:"protocol_version"`
 }
 
 type ConfigConsulAgentServers struct {
 	LAN []string
+}
+
+type ConfigConsulAgentPorts struct {
+	DNS int `json:"dns"`
 }
 
 func Default() Config {
