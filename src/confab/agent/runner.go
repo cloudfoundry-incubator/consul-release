@@ -40,8 +40,7 @@ func isRunningProcess(pidFilePath string) bool {
 	if err != nil {
 		return false
 	}
-	err = proc.Signal(syscall.Signal(0))
-	return err == nil
+	return signalProcess(proc) == nil
 }
 
 func (r *Runner) Run() error {
@@ -204,4 +203,13 @@ func (r *Runner) Cleanup() error {
 	r.Logger.Info("agent-runner.cleanup.success")
 
 	return nil
+}
+
+func (r *Runner) WaitForExit() error {
+	proc, err := r.getProcess()
+	if err != nil {
+		return err
+	}
+	_, err = proc.Wait()
+	return err
 }

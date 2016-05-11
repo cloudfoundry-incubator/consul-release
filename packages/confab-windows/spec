@@ -1,0 +1,8 @@
+---
+name: confab-windows
+
+dependencies:
+  - golang1.6-windows
+
+files:
+  - confab/**/*
