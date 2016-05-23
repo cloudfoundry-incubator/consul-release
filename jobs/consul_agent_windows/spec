@@ -1,0 +1,51 @@
+---
+name: consul_agent_windows
+templates:
+  agent.crt.erb: config/certs/agent.crt
+  agent.key.erb: config/certs/agent.key
+  ca.crt.erb: config/certs/ca.crt
+  config.json.erb: config/config.json
+
+packages:
+- consul-windows
+
+properties:
+  consul.agent.servers.lan:
+    description: "LAN server addresses to join on start."
+    default: []
+
+  consul.agent.servers.wan:
+    description: "WAN server addresses to join."
+    default: []
+
+  consul.agent.log_level:
+    description: "Agent log level."
+    default: info
+
+  consul.agent.datacenter:
+    description: "Name of the agent's datacenter."
+    default: dc1
+
+  consul.agent.services:
+    description: "Map of consul service definitions."
+    default: {}
+
+  consul.agent.protocol_version:
+    description: "The Consul protocol to use."
+    default: 2
+
+  consul.require_ssl:
+    description: "enable ssl for all communication with consul"
+    default: true
+
+  consul.ca_cert:
+    description: "PEM-encoded CA certificate"
+
+  consul.agent_cert:
+    description: "PEM-encoded agent certificate"
+
+  consul.agent_key:
+    description: "PEM-encoded client key"
+
+  consul.encrypt_keys:
+    description: "A list of passphrases that will be converted into encryption keys, the first key in the list is the active one"

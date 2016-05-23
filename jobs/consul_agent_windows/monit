@@ -1,0 +1,10 @@
+{
+  "processes": [
+    {
+      "name": "consul",
+      "executable": "C:\\var\\vcap\\packages\\consul-windows\\consul.exe",
+      "args": [ "agent", "-config-dir=/var/vcap/jobs/consul_agent_windows/config" ]
+    }
+  ]
+}
+

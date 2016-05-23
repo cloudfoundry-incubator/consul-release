@@ -1,0 +1,10 @@
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+function Unzip
+{
+    param([string]$zipfile, [string]$outpath)
+
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
+}
+
+
+Unzip "consul-windows/consul_0.5.2_windows_386.zip" $Env:BOSH_INSTALL_TARGET
