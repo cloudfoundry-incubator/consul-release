@@ -4,7 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
-	"path/filepath"
+	"path"
 	"strings"
 
 	"golang.org/x/crypto/pbkdf2"
@@ -78,14 +78,14 @@ func GenerateConfiguration(config Config) ConsulConfig {
 	consulConfig.VerifyIncoming = boolPtr(true)
 	consulConfig.VerifyServerHostname = boolPtr(true)
 	certsDir := "/var/vcap/jobs/consul_agent/config/certs"
-	consulConfig.CAFile = strPtr(filepath.Join(certsDir, "ca.crt"))
+	consulConfig.CAFile = strPtr(path.Join(certsDir, "ca.crt"))
 
 	if isServer {
-		consulConfig.KeyFile = strPtr(filepath.Join(certsDir, "server.key"))
-		consulConfig.CertFile = strPtr(filepath.Join(certsDir, "server.crt"))
+		consulConfig.KeyFile = strPtr(path.Join(certsDir, "server.key"))
+		consulConfig.CertFile = strPtr(path.Join(certsDir, "server.crt"))
 	} else {
-		consulConfig.KeyFile = strPtr(filepath.Join(certsDir, "agent.key"))
-		consulConfig.CertFile = strPtr(filepath.Join(certsDir, "agent.crt"))
+		consulConfig.KeyFile = strPtr(path.Join(certsDir, "agent.key"))
+		consulConfig.CertFile = strPtr(path.Join(certsDir, "agent.crt"))
 	}
 
 	if len(config.Consul.EncryptKeys) > 0 {
