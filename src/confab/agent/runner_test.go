@@ -19,7 +19,7 @@ import (
 
 var _ = Describe("Runner", func() {
 	var (
-		runner agent.Runner
+		runner *agent.Runner
 		logger *fakes.Logger
 	)
 
@@ -36,7 +36,7 @@ var _ = Describe("Runner", func() {
 
 		logger = &fakes.Logger{}
 
-		runner = agent.Runner{
+		runner = &agent.Runner{
 			Path:      pathToFakeProcess,
 			ConfigDir: configDir,
 			Recursors: []string{"8.8.8.8", "10.0.2.3"},
@@ -209,7 +209,7 @@ var _ = Describe("Runner", func() {
 				done := make(chan struct{})
 				go func() {
 					if err := runner.Wait(); err != nil {
-						panic(err)
+						panic(fmt.Sprintf("%#v\n", err))
 					}
 					done <- struct{}{}
 				}()
