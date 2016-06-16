@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"golang.org/x/crypto/pbkdf2"
@@ -39,7 +40,7 @@ type ConsulConfigPorts struct {
 	DNS int `json:"dns"`
 }
 
-func GenerateConfiguration(config Config) ConsulConfig {
+func GenerateConfiguration(config Config, configDir string) ConsulConfig {
 	lan := config.Consul.Agent.Servers.LAN
 	if lan == nil {
 		lan = []string{}
@@ -77,8 +78,8 @@ func GenerateConfiguration(config Config) ConsulConfig {
 	consulConfig.VerifyOutgoing = boolPtr(true)
 	consulConfig.VerifyIncoming = boolPtr(true)
 	consulConfig.VerifyServerHostname = boolPtr(true)
-	certsDir := "/var/vcap/jobs/consul_agent/config/certs"
-	consulConfig.CAFile = strPtr(path.Join(certsDir, "ca.crt"))
+	certsDir := filepath.Join(configDir, "certs")
+	consulConfig.CAFile = strPtr(filepath.Join(certsDir, "ca.crt"))
 
 	if isServer {
 		consulConfig.KeyFile = strPtr(path.Join(certsDir, "server.key"))
