@@ -4,11 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strconv"
 	"sync"
-	"syscall"
 	"testing"
 
 	"github.com/cloudfoundry-incubator/consul-release/src/confab/agent"
@@ -66,18 +64,6 @@ func getPID(runner *agent.Runner) (int, error) {
 	}
 
 	return pid, nil
-}
-
-func processIsRunning(runner *agent.Runner) bool {
-	pid, err := getPID(runner)
-	Expect(err).NotTo(HaveOccurred())
-
-	process, err := os.FindProcess(pid)
-	Expect(err).NotTo(HaveOccurred())
-
-	errorSendingSignal := process.Signal(syscall.Signal(0))
-
-	return (errorSendingSignal == nil)
 }
 
 type concurrentSafeBuffer struct {
