@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/cloudfoundry-incubator/consul-release/src/confab/utils"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -121,7 +123,7 @@ var _ = Describe("confab", func() {
 
 			pid, err := getPID(pidFile.Name())
 			Expect(err).NotTo(HaveOccurred())
-			Expect(isPIDRunning(pid)).To(BeTrue())
+			Expect(utils.IsPIDRunning(pid)).To(BeTrue())
 
 			stop := exec.Command(pathToConfab,
 				"stop",
@@ -130,7 +132,7 @@ var _ = Describe("confab", func() {
 			Eventually(stop.Run, COMMAND_TIMEOUT, COMMAND_TIMEOUT).Should(Succeed())
 
 			Eventually(func() bool {
-				return isPIDRunning(pid)
+				return utils.IsPIDRunning(pid)
 			}, COMMAND_TIMEOUT, time.Millisecond*250).Should(BeFalse())
 
 			Expect(fakeAgentOutput(consulConfigDir)).To(Equal(FakeAgentOutputData{
@@ -256,7 +258,7 @@ var _ = Describe("confab", func() {
 
 				pid, err := getPID(pidFile.Name())
 				Expect(err).NotTo(HaveOccurred())
-				Expect(isPIDRunning(pid)).To(BeTrue())
+				Expect(utils.IsPIDRunning(pid)).To(BeTrue())
 
 				Expect(fakeAgentOutput(consulConfigDir)).To(Equal(FakeAgentOutputData{
 					PID: pid,
@@ -303,7 +305,7 @@ var _ = Describe("confab", func() {
 
 				pid, err := getPID(pidFile.Name())
 				Expect(err).NotTo(HaveOccurred())
-				Expect(isPIDRunning(pid)).To(BeTrue())
+				Expect(utils.IsPIDRunning(pid)).To(BeTrue())
 
 				Eventually(func() (FakeAgentOutputData, error) {
 					return fakeAgentOutput(consulConfigDir)
@@ -414,7 +416,7 @@ var _ = Describe("confab", func() {
 			Eventually(cmd.Run, COMMAND_TIMEOUT, COMMAND_TIMEOUT).Should(Succeed())
 
 			Eventually(func() bool {
-				return pidIsForRunningProcess(pidFile.Name())
+				return utils.IsRunningProcess(pidFile.Name())
 			}, "5s").Should(BeFalse())
 
 			Eventually(func() (FakeAgentOutputData, error) {
@@ -629,7 +631,7 @@ var _ = Describe("confab", func() {
 
 				pid, err := getPID(pidFile.Name())
 				Expect(err).NotTo(HaveOccurred())
-				Expect(isPIDRunning(pid)).To(BeTrue())
+				Expect(utils.IsPIDRunning(pid)).To(BeTrue())
 			})
 		})
 
