@@ -48,6 +48,9 @@ properties:
   consul.agent.domain:
     description: "Domain suffix for DNS"
 
+  consul.agent.bind_addr:
+    description: "Address to bind to."
+
   consul.ca_cert:
     description: "PEM-encoded CA certificate"
 
