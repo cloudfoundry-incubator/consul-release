@@ -1,9 +1,15 @@
 <%=
+  def external_ip
+    if_p("consul.agent.bind_addr") do |bind_addr|
+      return bind_addr
+    end
+    return spec.address
+  end
 {
   node: {
     name: name,
     index: spec.index,
-    external_ip: spec.address,
+    external_ip: external_ip
   },
   consul: p('consul')
 }.to_json
