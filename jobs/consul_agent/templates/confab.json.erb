@@ -18,12 +18,20 @@
   network.ip
   end
 
+  consul = p('consul')
+  services = consul.fetch('agent', {}).fetch('services', {})
+  services.each do |_, service|
+      tags = service.fetch('tags', [])
+      tags << spec.az
+      services['tags'] = tags.uniq
+  end
+
   {
     node: {
       name: name,
       index: spec.index,
       external_ip: discover_external_ip,
     },
-    consul: p('consul'),
+    consul: consul,
   }.to_json
 %>
